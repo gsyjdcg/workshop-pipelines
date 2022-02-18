@@ -3,7 +3,7 @@
 pipeline {
     agent {
         docker {
-            image 'adoptopenjdk/openjdk11:jdk-11.0.3_7'
+            image 'youmoni/jdk11-docker'
             args '--network ci --mount type=volume,source=ci-maven-home,target=/root/.m2'
         }
     }
