@@ -85,7 +85,7 @@ pipeline {
             steps {
                 echo "-=- run code inspection & check quality gate -=-"
                 withSonarQubeEnv('ci-sonarqube') {
-                    sh "./mvnw sonar:sonar -Dsonar.host.url=http://172.18.0.4:9000/sonarqube"
+                    sh "./mvnw sonar:sonar"
                 }
                 timeout(time: 10, unit: 'MINUTES') {
                     //waitForQualityGate abortPipeline: true
