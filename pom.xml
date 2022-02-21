@@ -53,7 +53,7 @@
         <dependency.version>3.1.1</dependency.version>
 
         <spotify-docker.version>1.2.0</spotify-docker.version>
-        <docker.image.prefix>derick</docker.image.prefix>
+        <docker.image.prefix>gsyjdcg</docker.image.prefix>
     </properties>
 
     <dependencies>
