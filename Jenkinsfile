@@ -79,7 +79,7 @@ pipeline {
             steps {
                 echo "-=- run dependency vulnerability tests -=-"
                 sh "./mvnw dependency-check:check"
-                dependencyCheckPublisher
+                dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
             }
         }
         stage('Code inspection & quality gate') {
