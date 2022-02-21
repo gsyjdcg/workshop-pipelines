@@ -97,7 +97,7 @@ To integrate SonarQube with Jenkins, the Jenkins plugin must be configured to re
 
 To configure that integration, click on `Manage Jenkins` menu option and next click on `Configure System` menu option. Scroll down until the section `SonarQube Servers` is visible. Click the checkbox to allow injection of server configuration.
 
-Next, configure the SonarQube instance name and URL. To align configuration with the expected instance name requested later during pipeline run time, enter `ci-sonarqube` for the instance name, and for the server URL, the SonarQube home URL. For example, for a server running on AWS EC2, the URL would look like: `http://ec2-xxx-xxx-xxx-xxx.eu-west-1.compute.amazonaws.com:9000/sonarqube`
+Next, configure the SonarQube instance name and URL. To align configuration with the expected instance name requested later during pipeline run time, enter `ci-sonarqube` for the instance name, and for the server URL, the SonarQube home URL. For example: `http://ci-sonarqube:9000/sonarqube`
 
 Click the `Save` button and configuration on the Jenkins side is ready.
 
@@ -105,7 +105,7 @@ Once configuration is done on the Jenkins side, it is time to complete the other
 
 Login to SonarQube using the default credentials: both username and password are simply `admin`. On first run, a tutorial wizard will show that can be skipped.
 
-Click on `Administration` on the top menu and afterwards on `Webhooks` on the left menu. Enter `ci-jenkins` for the webhook name, and for the URL, the Jenkins home URL appending `/sonarqube-webhook`. For example, for a server running on AWS EC2, the URL would look like: `http://ec2-xxx-xxx-xxx-xxx.eu-west-1.compute.amazonaws.com:9080/jenkins/sonarqube-webhook`.
+Click on `Administration` on the top menu and afterwards on `Webhooks` on the left menu. Enter `ci-jenkins` for the webhook name, and for the URL, the Jenkins home URL appending `/sonarqube-webhook`. For example: `http://ci-jenkins:9080/jenkins/sonarqube-webhook`.
 
 Click the `Save` button and configuration on the SonarQube side is ready.
 
@@ -484,7 +484,7 @@ OWASP is a global organization focused on secure development practices. OWASP al
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>5.0.0-M3</version>
+                <version>6.5.3</version>
                 <configuration>
                     <format>ALL</format>
                 </configuration>
@@ -502,7 +502,7 @@ To ensure that unsecure vulnerabilities are not carried onto a live environment,
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>5.0.0-M3</version>
+                <version>6.5.3</version>
                 <configuration>
                     <format>ALL</format>
                     <failBuildOnCVSS>5</failBuildOnCVSS>
@@ -540,7 +540,7 @@ First, the pipeline is opened with the agent to be used for the build execution,
 pipeline {
     agent {
         docker {
-            image 'adoptopenjdk/openjdk11:jdk-11.0.3_7'
+            image 'youmoni/jdk11-docker'
             args '--network ci'
         }
     }
@@ -567,7 +567,7 @@ As the build is currently configured, it will run completely clean every time, i
     ...
     agent {
         docker {
-            image 'adoptopenjdk/openjdk11:jdk-11.0.3_7'
+            image 'youmoni/jdk11-docker'
             args '--network ci --mount type=volume,source=ci-maven-home,target=/root/.m2'
         }
     }
@@ -721,7 +721,7 @@ The next two stages will check dependencies for known security vulnerabilities, 
             steps {
                 echo "-=- run dependency vulnerability tests -=-"
                 sh "./mvnw dependency-check:check"
-                dependencyCheckPublisher
+                dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
             }
         }
 
@@ -731,7 +731,8 @@ The next two stages will check dependencies for known security vulnerabilities, 
                 withSonarQubeEnv('ci-sonarqube') {
                     sh "./mvnw sonar:sonar"
                 }
-                timeout(time: 10, unit: 'MINUTES') {
+                sleep(10)
+                timeout(time: 5, unit: 'MINUTES') {
                     //waitForQualityGate abortPipeline: true
                     script {
                         def qg = waitForQualityGate()
