@@ -88,6 +88,7 @@ pipeline {
                 withSonarQubeEnv('ci-sonarqube') {
                     sh "./mvnw sonar:sonar"
                 }
+                sleep(10)
                 timeout(time: 5, unit: 'MINUTES') {
                     //waitForQualityGate abortPipeline: true
                     script {
