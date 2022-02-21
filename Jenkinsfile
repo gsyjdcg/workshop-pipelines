@@ -8,7 +8,7 @@ pipeline {
         }
     }
     environment {
-        ORG_NAME = "derick"
+        ORG_NAME = "gsyjdcg"
         APP_NAME = "workshop-pipelines"
         APP_CONTEXT_ROOT = "/"
         APP_LISTENING_PORT = "8080"
