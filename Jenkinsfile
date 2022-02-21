@@ -88,7 +88,7 @@ pipeline {
                 withSonarQubeEnv('ci-sonarqube') {
                     sh "./mvnw sonar:sonar"
                 }
-                timeout(time: 20, unit: 'MINUTES') {
+                timeout(time: 5, unit: 'MINUTES') {
                     //waitForQualityGate abortPipeline: true
                     script {
                         def qg = waitForQualityGate()
