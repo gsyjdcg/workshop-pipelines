@@ -14,6 +14,7 @@ pipeline {
         APP_LISTENING_PORT = "8080"
         TEST_CONTAINER_NAME = "ci-${APP_NAME}-${BUILD_NUMBER}"
         DOCKER_HUB = credentials("${ORG_NAME}-docker-hub")
+        SONAR = false
     }
     stages {
         stage('Compile') {
@@ -82,6 +83,11 @@ pipeline {
             }
         }
         stage('Code inspection & quality gate') {
+            when { 
+                expression {
+                    return SONAR
+                }
+            }
             steps {
                 echo "-=- run code inspection & check quality gate -=-"
                 withSonarQubeEnv('ci-sonarqube') {
