@@ -14,7 +14,7 @@ pipeline {
         APP_LISTENING_PORT = "8080"
         TEST_CONTAINER_NAME = "ci-${APP_NAME}-${BUILD_NUMBER}"
         DOCKER_HUB = credentials("${ORG_NAME}-docker-hub")
-        SONAR = false
+        SONAR = true
     }
     stages {
         stage('Compile') {
