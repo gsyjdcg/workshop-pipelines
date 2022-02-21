@@ -79,6 +79,7 @@ pipeline {
             steps {
                 echo "-=- run dependency vulnerability tests -=-"
                 sh "./mvnw dependency-check:check"
+                dependencyCheckPublisher
             }
         }
         stage('Code inspection & quality gate') {
@@ -87,7 +88,7 @@ pipeline {
                 withSonarQubeEnv('ci-sonarqube') {
                     sh "./mvnw sonar:sonar"
                 }
-                timeout(time: 10, unit: 'MINUTES') {
+                timeout(time: 20, unit: 'MINUTES') {
                     //waitForQualityGate abortPipeline: true
                     script {
                         def qg = waitForQualityGate()
