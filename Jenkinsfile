@@ -84,9 +84,7 @@ pipeline {
         }
         stage('Code inspection & quality gate') {
             when { 
-                expression {
-                    return SONAR
-                }
+                expression { env.SONAR == true }                
             }
             steps {
                 echo "-=- run code inspection & check quality gate -=-"
