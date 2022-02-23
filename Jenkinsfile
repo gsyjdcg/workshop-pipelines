@@ -54,7 +54,6 @@ pipeline {
                 echo "-=- run Docker image -=-"
                 sh "java --version"
                 sh "docker --version"
-                sh "docker run hello-world"
                 sh "docker run --name ${TEST_CONTAINER_NAME} --detach --rm --network ci --expose ${APP_LISTENING_PORT} --expose 6300 --env JAVA_OPTS='-Dserver.port=${APP_LISTENING_PORT} -Dspring.profiles.active=ci -javaagent:/jacocoagent.jar=output=tcpserver,address=*,port=6300' ${ORG_NAME}/${APP_NAME}:latest"
             }
         }
