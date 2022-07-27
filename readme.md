@@ -49,7 +49,7 @@ Both Jenkins and SonarQube servers are required for running the pipelines and co
         --env SONARQUBE_JDBC_PASSWORD="sonarsonar" \
         sonarqube:6.7.6-community -Dsonar.web.context=/sonarqube
 
-docker run --name="ci-jira" -v ci-jira-data:/var/atlassian/application-data/jira  -d -p 9081:8080 atlassian/jira-software
+    docker run --name="ci-jira" --detach --network ci -v ci-jira-data:/var/atlassian/application-data/jira -d -p 9081:8080 atlassian/jira-software
 
 Note that the preceding commands will set up persistent volumes so all configuration, plugins and data persists across server restarts.
 
